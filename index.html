@@ -2,10 +2,9 @@
 <html lang="ja" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dialogflow CX 個人学習スタジオ &amp; 用語ノート（非公式）</title>
-    
-    <!-- External Frameworks & Fonts -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,148 +25,117 @@
             }
         }
     </script>
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS Styles -->
     <style>
-        body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        body { font-family: 'Inter', sans-serif; }
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
-        
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
-
-        .touch-target {
-            min-height: 44px;
-        }
     </style>
 </head>
-<body class="h-full bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 flex flex-col overflow-hidden select-none sm:select-text">
+<body class="h-full bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 flex flex-col overflow-hidden">
 
-    <!-- Toast Notifications Container -->
-    <div id="toastContainer" class="fixed top-16 sm:top-20 right-4 sm:right-6 z-50 space-y-2 pointer-events-none max-w-[90vw]"></div>
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="fixed top-20 right-6 z-50 space-y-3 pointer-events-none"></div>
 
-    <!-- Header Bar -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-16 flex items-center justify-between px-3 sm:px-6 z-40 flex-shrink-0 shadow-sm">
-        <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
-            <button onclick="toggleSidebar()" class="p-2 -ml-1 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition" aria-label="Toggle Sidebar">
-                <i class="fa-solid fa-bars text-lg sm:text-xl"></i>
+    <!-- Header -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-16 flex items-center justify-between px-4 sm:px-6 z-40 flex-shrink-0 shadow-sm">
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                <i class="fa-solid fa-bars text-lg"></i>
             </button>
-            <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-2 rounded-xl shadow-md flex-shrink-0 flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10">
-                <svg viewBox="0 0 32 32" class="w-5 h-5 sm:w-6 sm:h-6 fill-white">
-                    <rect x="14.5" y="3" width="3" height="4.5" rx="1.5"/>
-                    <rect x="2" y="12" width="3" height="8" rx="1.5"/>
-                    <rect x="27" y="12" width="3" height="8" rx="1.5"/>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12,7 H20 C23.866,7 27,10.134 27,14 V19 C27,22.866 23.866,26 20,26 H12 C8.134,26 5,22.866 5,19 V14 C5,10.134 8.134,7 12,7 Z M11.5,12 A1.75,1.75 0 1,0 11.5,15.5 A1.75,1.75 0 1,0 11.5,12 Z M20.5,12 A1.75,1.75 0 1,0 20.5,15.5 A1.75,1.75 0 1,0 20.5,12 Z M11,20.5 A1,1 0 1,0 11,22.5 A1,1 0 1,0 11,20.5 Z M16,20.5 A1,1 0 1,0 16,22.5 A1,1 0 1,0 16,20.5 Z M21,20.5 A1,1 0 1,0 21,22.5 A1,1 0 1,0 21,20.5 Z"/>
-                </svg>
+            <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                <i class="fa-solid fa-graduation-cap text-lg"></i>
             </div>
-            <div class="min-w-0">
-                <h1 class="font-bold text-sm sm:text-lg leading-tight tracking-tight text-slate-900 dark:text-white flex items-center truncate">
-                    <span class="truncate">Dialogflow CX 学習</span>
-                    <span class="ml-1.5 px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[9px] sm:text-[10px] font-semibold rounded-md uppercase flex-shrink-0">Unofficial</span>
+            <div>
+                <h1 class="font-bold text-base sm:text-lg leading-tight tracking-tight text-slate-900 dark:text-white flex items-center">
+                    <span>Dialogflow CX 個人学習スタジオ</span>
+                    <span class="ml-2 px-2 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-semibold rounded-full uppercase">Unofficial</span>
                 </h1>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden md:block">公式ドキュメントを参考にした個人学習・概念理解用アプリ</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">公式ドキュメントを参考にした個人学習・概念理解用アプリ</p>
             </div>
         </div>
         
-        <div class="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
-            <div class="hidden md:flex items-center space-x-2 bg-slate-100 dark:bg-slate-700/60 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">進捗:</span>
-                <div class="w-20 bg-slate-200 dark:bg-slate-600 h-2 rounded-full overflow-hidden">
+        <div class="flex items-center space-x-3">
+            <div class="hidden sm:flex items-center space-x-2 bg-slate-100 dark:bg-slate-700/60 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">学習進捗:</span>
+                <div class="w-24 bg-slate-200 dark:bg-slate-600 h-2.5 rounded-full overflow-hidden">
                     <div id="headerProgressBar" class="bg-emerald-500 h-full w-0 transition-all duration-500"></div>
                 </div>
                 <span id="headerProgressText" class="text-xs font-bold text-emerald-600 dark:text-emerald-400">0%</span>
             </div>
 
-            <button onclick="toggleEasyMode()" id="easyModeToggleBtn" class="px-2.5 sm:px-3 py-1.5 bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-300 hover:bg-teal-100 rounded-xl text-xs font-semibold transition border border-teal-200 dark:border-teal-800 shadow-sm flex items-center touch-target">
-                <i class="fa-solid fa-face-smile text-sm sm:mr-1.5"></i>
-                <span class="hidden sm:inline">やさしい解説 (ON)</span>
+            <button onclick="toggleEasyMode()" id="easyModeToggleBtn" class="px-3.5 py-1.5 bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-300 hover:bg-teal-100 rounded-xl text-xs sm:text-sm font-semibold transition border border-teal-200 dark:border-teal-800 shadow-sm flex items-center">
+                <i class="fa-solid fa-face-smile mr-1.5"></i> やさしい解説 (ON)
             </button>
-            
-            <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition" aria-label="Toggle Theme">
+            <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" aria-label="Toggle Theme">
                 <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
             </button>
         </div>
     </header>
 
     <div class="flex-1 flex overflow-hidden relative">
-        <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-20 md:hidden opacity-0 pointer-events-none transition-opacity duration-300"></div>
-
-        <!-- Sidebar -->
-        <aside id="sidebar" class="w-72 md:w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col flex-shrink-0 transition-transform duration-300 z-30 fixed md:relative inset-y-0 left-0 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col flex-shrink-0 transition-all duration-300 z-30 absolute md:relative inset-y-0 left-0 -translate-x-full md:translate-x-0">
             <div class="p-4 space-y-1 overflow-y-auto flex-1">
-                <div class="flex items-center justify-between md:hidden pb-2 mb-2 border-b border-slate-100 dark:border-slate-700">
-                    <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">メニュー</span>
-                    <button onclick="closeSidebar()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                </div>
+                <div class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">学習メニュー</div>
                 
-                <div class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-1">学習メニュー</div>
-                
-                <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition active touch-target" data-target="dashboard">
-                    <i class="fa-solid fa-house w-5 text-indigo-500 text-center"></i>
+                <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition active" data-target="dashboard">
+                    <i class="fa-solid fa-house w-5 text-indigo-500"></i>
                     <span>ホーム &amp; ダッシュボード</span>
                 </button>
-                <button onclick="switchTab('roadmap')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="roadmap">
-                    <i class="fa-solid fa-map-location-dot w-5 text-blue-500 text-center"></i>
+                <button onclick="switchTab('roadmap')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="roadmap">
+                    <i class="fa-solid fa-map-location-dot w-5 text-blue-500"></i>
                     <span>学習ロードマップ (Lv.1〜4)</span>
                 </button>
-                <button onclick="switchTab('flashcards')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="flashcards">
-                    <i class="fa-solid fa-clone w-5 text-amber-500 text-center"></i>
+                <button onclick="switchTab('flashcards')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="flashcards">
+                    <i class="fa-solid fa-clone w-5 text-amber-500"></i>
                     <span>用語フラッシュカード</span>
                 </button>
-                <button onclick="switchTab('quiz')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="quiz">
-                    <i class="fa-solid fa-circle-question w-5 text-rose-500 text-center"></i>
+                <button onclick="switchTab('quiz')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="quiz">
+                    <i class="fa-solid fa-circle-question w-5 text-rose-500"></i>
                     <span>理解度チェッククイズ</span>
                 </button>
                 
-                <div class="pt-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-1">リファレンス &amp; 実践</div>
+                <div class="pt-4 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">リファレンス &amp; 実践</div>
 
-                <button onclick="switchTab('official_glossary')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="official_glossary">
-                    <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-emerald-500">
-                        <svg viewBox="0 0 32 32" class="w-4 h-4 fill-emerald-500">
-                            <rect x="14.5" y="3" width="3" height="4.5" rx="1.5"/>
-                            <rect x="2" y="12" width="3" height="8" rx="1.5"/>
-                            <rect x="27" y="12" width="3" height="8" rx="1.5"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12,7 H20 C23.866,7 27,10.134 27,14 V19 C27,22.866 23.866,26 20,26 H12 C8.134,26 5,22.866 5,19 V14 C5,10.134 8.134,7 12,7 Z M11.5,12 A1.75,1.75 0 1,0 11.5,15.5 A1.75,1.75 0 1,0 11.5,12 Z M20.5,12 A1.75,1.75 0 1,0 20.5,15.5 A1.75,1.75 0 1,0 20.5,12 Z M11,20.5 A1,1 0 1,0 11,22.5 A1,1 0 1,0 11,20.5 Z M16,20.5 A1,1 0 1,0 16,22.5 A1,1 0 1,0 16,20.5 Z M21,20.5 A1,1 0 1,0 21,22.5 A1,1 0 1,0 21,20.5 Z"/>
-                        </svg>
-                    </div>
+                <button onclick="switchTab('official_glossary')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="official_glossary">
+                    <i class="fa-solid fa-book-bookmark w-5 text-emerald-500"></i>
                     <span>主要用語ノート</span>
                 </button>
-                <button onclick="switchTab('simulator')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="simulator">
-                    <i class="fa-solid fa-microchip w-5 text-teal-500 text-center"></i>
+                <button onclick="switchTab('simulator')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="simulator">
+                    <i class="fa-solid fa-robot w-5 text-teal-500"></i>
                     <span>体験シミュレーター (デバッグ)</span>
                 </button>
-                <button onclick="switchTab('nocode')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="nocode">
-                    <i class="fa-solid fa-puzzle-piece w-5 text-purple-500 text-center"></i>
+                <button onclick="switchTab('nocode')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="nocode">
+                    <i class="fa-solid fa-puzzle-piece w-5 text-purple-500"></i>
                     <span>ノーコード開発ガイド</span>
                 </button>
-                <button onclick="switchTab('voicebot')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="voicebot">
-                    <i class="fa-solid fa-microphone-lines w-5 text-cyan-500 text-center"></i>
+                <button onclick="switchTab('voicebot')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="voicebot">
+                    <i class="fa-solid fa-microphone-lines w-5 text-cyan-500"></i>
                     <span>ボイスボット構築ガイド</span>
                 </button>
-                <button onclick="switchTab('links')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition touch-target" data-target="links">
-                    <i class="fa-solid fa-link w-5 text-indigo-400 text-center"></i>
+                <button onclick="switchTab('links')" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 transition" data-target="links">
+                    <i class="fa-solid fa-link w-5 text-indigo-400"></i>
                     <span>参考リンク集</span>
                 </button>
             </div>
-
             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-400 flex flex-col space-y-2">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="font-semibold text-slate-600 dark:text-slate-300">Dialogflow CX Notes</p>
                         <p class="text-[10px]">Personal Study Tool</p>
                     </div>
-                    <button onclick="resetAllProgress()" class="text-rose-500 hover:underline text-[11px] p-1" title="進捗をリセット">リセット</button>
+                    <button onclick="resetAllProgress()" class="text-rose-500 hover:underline text-[10px]" title="進捗をリセット">リセット</button>
                 </div>
                 <p class="text-[9px] text-slate-400 dark:text-slate-500 leading-tight">
                     ※非公式の個人学習用アプリです。Dialogflow™ は Google LLC の商標です。
@@ -175,124 +143,123 @@
             </div>
         </aside>
 
-        <!-- Main Content View -->
-        <main class="flex-1 overflow-y-auto p-3 sm:p-6 md:p-8 bg-slate-50/50 dark:bg-slate-900/50">
-            <div class="max-w-5xl mx-auto pb-12 sm:pb-16">
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-900/50">
+            <div class="max-w-5xl mx-auto pb-16">
 
                 <!-- 1. DASHBOARD TAB -->
-                <section id="tab-dashboard" class="tab-content space-y-4 sm:space-y-6">
-                    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-5 sm:p-8 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
-                        <div class="space-y-2.5">
+                <section id="tab-dashboard" class="tab-content space-y-6">
+                    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        <div class="space-y-3">
                             <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm">個人学習用スタディツール</span>
-                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Dialogflow CX の基礎を学ぼう！</h2>
-                            <p class="text-blue-100 text-xs sm:text-sm max-w-2xl leading-relaxed">
+                            <h2 class="text-2xl sm:text-4xl font-bold tracking-tight">Dialogflow CX の基礎を学ぼう！</h2>
+                            <p class="text-blue-100 text-sm sm:text-base max-w-2xl leading-relaxed">
                                 公式ドキュメントで整理されている主要概念（「有効」「エージェント」「ランタイムと設計時」「会話のターン」など）をわかりやすく解説。体験シミュレーターや整理ノートを使って対話型AIの基礎構造を楽しく学べます。
                             </p>
                         </div>
-                        <div class="bg-white/10 dark:bg-slate-800/40 p-4 sm:p-5 rounded-2xl backdrop-blur-md border border-white/20 text-center flex flex-row md:flex-col items-center justify-between w-full md:w-auto flex-shrink-0">
-                            <div>
-                                <div class="text-[10px] sm:text-xs uppercase tracking-wider text-blue-200">現在の達成度</div>
-                                <div class="text-3xl sm:text-4xl font-bold" id="dashPercentText">0%</div>
-                            </div>
-                            <button onclick="switchTab('roadmap')" class="px-4 py-2 bg-white text-blue-600 hover:bg-blue-50 rounded-xl font-bold text-xs shadow-md transition active:scale-95">
+                        <div class="bg-white/10 dark:bg-slate-800/40 p-5 rounded-2xl backdrop-blur-md border border-white/20 text-center flex flex-col items-center flex-shrink-0">
+                            <div class="text-xs uppercase tracking-wider text-blue-200 mb-1">現在の学習達成度</div>
+                            <div class="text-4xl font-bold mb-2" id="dashPercentText">0%</div>
+                            <button onclick="switchTab('roadmap')" class="px-4 py-2 bg-white text-blue-600 hover:bg-blue-50 rounded-xl font-bold text-xs shadow-md transition">
                                 学習を始める <i class="fa-solid fa-arrow-right ml-1"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                        <div onclick="switchTab('roadmap')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-blue-500 cursor-pointer transition group active:scale-[0.99]">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg sm:text-xl mb-3 group-hover:scale-110 transition">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div onclick="switchTab('roadmap')" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-blue-500 cursor-pointer transition group">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition">
                                 <i class="fa-solid fa-map-location-dot"></i>
                             </div>
-                            <h3 class="font-bold text-sm sm:text-base mb-1">ロードマップ解説</h3>
+                            <h3 class="font-bold text-base mb-1">ロードマップ解説</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400">レベル別トピックをクリックして解説を確認。</p>
                         </div>
 
-                        <div onclick="switchTab('simulator')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-teal-500 cursor-pointer transition group active:scale-[0.99]">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-lg sm:text-xl mb-3 group-hover:scale-110 transition">
-                                <i class="fa-solid fa-microchip"></i>
+                        <div onclick="switchTab('simulator')" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-teal-500 cursor-pointer transition group">
+                            <div class="w-12 h-12 rounded-xl bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-robot"></i>
                             </div>
-                            <h3 class="font-bold text-sm sm:text-base mb-1">体験シミュレーター</h3>
+                            <h3 class="font-bold text-base mb-1">体験シミュレーター</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400">Flow/Page/Intentの動きを疑似体験。</p>
                         </div>
 
-                        <div onclick="switchTab('nocode')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-purple-500 cursor-pointer transition group active:scale-[0.99]">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-lg sm:text-xl mb-3 group-hover:scale-110 transition">
+                        <div onclick="switchTab('nocode')" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-purple-500 cursor-pointer transition group">
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition">
                                 <i class="fa-solid fa-puzzle-piece"></i>
                             </div>
-                            <h3 class="font-bold text-sm sm:text-base mb-1">ノーコード構築ガイド</h3>
+                            <h3 class="font-bold text-base mb-1">ノーコード構築ガイド</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400">ビジュアル画面での標準的な開発手順。</p>
                         </div>
 
-                        <div onclick="switchTab('quiz')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-rose-500 cursor-pointer transition group active:scale-[0.99]">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-rose-50 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-lg sm:text-xl mb-3 group-hover:scale-110 transition">
+                        <div onclick="switchTab('quiz')" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-rose-500 cursor-pointer transition group">
+                            <div class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-110 transition">
                                 <i class="fa-solid fa-circle-question"></i>
                             </div>
-                            <h3 class="font-bold text-sm sm:text-base mb-1">理解度クイズ (10問)</h3>
+                            <h3 class="font-bold text-base mb-1">理解度クイズ (10問)</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400">学んだ用語や概念のセルフチェック。</p>
                         </div>
                     </div>
 
+                    <!-- Disclaimer Card -->
                     <div class="bg-slate-100 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 space-y-1">
                         <div class="font-semibold text-slate-600 dark:text-slate-300 flex items-center">
                             <i class="fa-solid fa-triangle-exclamation mr-1.5 text-amber-500"></i> 免責事項・権利表記
                         </div>
-                        <p class="text-[11px] leading-relaxed">本アプリケーションは個人的な学習および理解を目的として独自に制作された非公式（Unofficial）の学習用ツールです。Dialogflow™ および Google Cloud™ は Google LLC の商標または登録商標です。本アプリは Google LLC と連携、承認、または後援されているものではありません。</p>
+                        <p>本アプリケーションは個人的な学習および理解を目的として独自に制作された非公式（Unofficial）の学習用ツールです。Dialogflow™ および Google Cloud™ は Google LLC の商標または登録商標です。本アプリは Google LLC と連携、承認、または後援されているものではありません。</p>
                     </div>
                 </section>
 
                 <!-- 2. ROADMAP TAB -->
-                <section id="tab-roadmap" class="tab-content hidden space-y-4 sm:space-y-6">
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-5 sm:p-8 text-white shadow-xl">
-                        <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-2 backdrop-blur-sm">ステップ別詳細学習</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold mb-2">段階的学習ロードマップ</h2>
-                        <p class="text-blue-100 text-xs sm:text-sm leading-relaxed">
+                <section id="tab-roadmap" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                        <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">ステップ別詳細学習</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold mb-3">段階的学習ロードマップ (Lv.1 〜 Lv.4)</h2>
+                        <p class="text-blue-100 text-sm sm:text-base leading-relaxed">
                             タイトルをクリックすると<b>解説ダイアログ（概要定義・具体例・設計ポイント）</b>が開きます。理解したらチェックを入れて進捗を進めましょう！
                         </p>
                     </div>
 
-                    <div class="space-y-4 sm:space-y-6" id="roadmapContainer">
+                    <div class="space-y-6" id="roadmapContainer">
                         <!-- Level 1 -->
                         <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                            <div class="bg-blue-50 dark:bg-blue-900/30 px-4 sm:px-6 py-3.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <span class="px-2.5 py-0.5 bg-blue-600 text-white rounded-lg text-xs font-bold">Level 1</span>
-                                    <h3 class="font-bold text-sm sm:text-lg text-slate-900 dark:text-white">ボットと登場人物の基本</h3>
+                            <div class="bg-blue-50 dark:bg-blue-900/30 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-blue-600 text-white rounded-xl text-xs font-bold">Level 1</span>
+                                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">ボットと登場人物の基本</h3>
                                 </div>
                                 <span class="text-xs font-semibold text-blue-600 dark:text-blue-400" id="lvl1Count">0/3 完了</span>
                             </div>
-                            <div class="p-3 sm:p-6 space-y-2.5">
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl1_1" onchange="toggleRoadmapItem('lvl1_1')" class="mt-0.5 w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl1_1')">
+                            <div class="p-6 space-y-3">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl1_1" onchange="toggleRoadmapItem('lvl1_1')" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl1_1')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">1-1. エージェントと仮想エージェント・人間オペレーター</span>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>1-1. エージェントと仮想エージェント・人間オペレーター</span>
+                                            <span class="text-xs text-blue-600 dark:text-blue-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">仮想エージェント（AIボット）と人間（ライブエージェント）の役割の違い。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">仮想エージェント（AIボット）と人間（ライブエージェント）の役割の違い。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl1_2" onchange="toggleRoadmapItem('lvl1_2')" class="mt-0.5 w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl1_2')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl1_2" onchange="toggleRoadmapItem('lvl1_2')" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl1_2')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">1-2. エンドユーザーとデベロッパー ユーザー</span>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>1-2. エンドユーザーとデベロッパー ユーザー</span>
+                                            <span class="text-xs text-blue-600 dark:text-blue-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">会話する顧客（エンドユーザー）と構築する開発者（デベロッパー）の定義。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">会話する顧客（エンドユーザー）と構築する開発者（デベロッパー）の定義。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl1_3" onchange="toggleRoadmapItem('lvl1_3')" class="mt-0.5 w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl1_3')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl1_3" onchange="toggleRoadmapItem('lvl1_3')" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl1_3')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">1-3. コンタクト センターの仕組み</span>
-                                            <span class="text-xs text-blue-600 dark:text-blue-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>1-3. コンタクト センターの仕組み</span>
+                                            <span class="text-xs text-blue-600 dark:text-blue-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">顧客の問い合わせを自動対応・オペレーター連携するプラットフォーム。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">顧客の問い合わせを自動対応・オペレーター連携するプラットフォーム。</p>
                                     </div>
                                 </div>
                             </div>
@@ -300,44 +267,44 @@
 
                         <!-- Level 2 -->
                         <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                            <div class="bg-indigo-50 dark:bg-indigo-900/30 px-4 sm:px-6 py-3.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <span class="px-2.5 py-0.5 bg-indigo-600 text-white rounded-lg text-xs font-bold">Level 2</span>
-                                    <h3 class="font-bold text-sm sm:text-lg text-slate-900 dark:text-white">会話の仕組みと状態</h3>
+                            <div class="bg-indigo-50 dark:bg-indigo-900/30 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-indigo-600 text-white rounded-xl text-xs font-bold">Level 2</span>
+                                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">会話の仕組みとランタイム状態</h3>
                                 </div>
                                 <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400" id="lvl2Count">0/3 完了</span>
                             </div>
-                            <div class="p-3 sm:p-6 space-y-2.5">
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl2_1" onchange="toggleRoadmapItem('lvl2_1')" class="mt-0.5 w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl2_1')">
+                            <div class="p-6 space-y-3">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl2_1" onchange="toggleRoadmapItem('lvl2_1')" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl2_1')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">2-1. 会話とセッション、会話のターン</span>
-                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>2-1. 会話とセッション、会話のターン</span>
+                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">一連の対話（セッション）と1往復のやり取り（ターン）の関係。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">一連の対話（セッション）と1往復のやり取り（ターン）の関係。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl2_2" onchange="toggleRoadmapItem('lvl2_2')" class="mt-0.5 w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl2_2')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl2_2" onchange="toggleRoadmapItem('lvl2_2')" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl2_2')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">2-2. 有効（Active）な状態のルール</span>
-                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>2-2. 有効（Active）な状態のルール</span>
+                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">常に1つのハンドブック、1つのページ/フローのみがアクティブになる原則。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">常に1つのハンドブック、1つのページ/フローのみがアクティブになる原則。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl2_3" onchange="toggleRoadmapItem('lvl2_3')" class="mt-0.5 w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl2_3')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl2_3" onchange="toggleRoadmapItem('lvl2_3')" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl2_3')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">2-3. 設計時 vs ランタイム</span>
-                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>2-3. 設計時 vs ランタイム アクティビティ</span>
+                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">コンソールでの構築時（設計時）と顧客との会話中（ランタイム）の明確な区別。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">コンソールでの構築時（設計時）と顧客との会話中（ランタイム）の明確な区別。</p>
                                     </div>
                                 </div>
                             </div>
@@ -345,44 +312,44 @@
 
                         <!-- Level 3 -->
                         <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                            <div class="bg-teal-50 dark:bg-teal-900/30 px-4 sm:px-6 py-3.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <span class="px-2.5 py-0.5 bg-teal-600 text-white rounded-lg text-xs font-bold">Level 3</span>
-                                    <h3 class="font-bold text-sm sm:text-lg text-slate-900 dark:text-white">音声とシステム</h3>
+                            <div class="bg-teal-50 dark:bg-teal-900/30 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-teal-600 text-white rounded-xl text-xs font-bold">Level 3</span>
+                                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">音声とシステムの基礎</h3>
                                 </div>
                                 <span class="text-xs font-semibold text-teal-600 dark:text-teal-400" id="lvl3Count">0/3 完了</span>
                             </div>
-                            <div class="p-3 sm:p-6 space-y-2.5">
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl3_1" onchange="toggleRoadmapItem('lvl3_1')" class="mt-0.5 w-5 h-5 text-teal-600 rounded focus:ring-teal-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl3_1')">
+                            <div class="p-6 space-y-3">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl3_1" onchange="toggleRoadmapItem('lvl3_1')" class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl3_1')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">3-1. 音声入力と音声認識（STT）</span>
-                                            <span class="text-xs text-teal-600 dark:text-teal-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>3-1. 音声入力と音声認識（STT）</span>
+                                            <span class="text-xs text-teal-600 dark:text-teal-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">ユーザーの声をSpeech-to-Textで瞬時にテキスト化する仕組み。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">ユーザーの声をSpeech-to-Textで瞬時にテキスト化する仕組み。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl3_2" onchange="toggleRoadmapItem('lvl3_2')" class="mt-0.5 w-5 h-5 text-teal-600 rounded focus:ring-teal-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl3_2')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl3_2" onchange="toggleRoadmapItem('lvl3_2')" class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl3_2')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">3-2. オーディオ出力と音声合成（TTS）</span>
-                                            <span class="text-xs text-teal-600 dark:text-teal-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>3-2. オーディオ出力と音声合成（TTS）</span>
+                                            <span class="text-xs text-teal-600 dark:text-teal-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">Text-to-Speechで自然な会話音声をリアルタイム生成する仕組み。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Text-to-Speechで自然な会話音声をリアルタイム生成する仕組み。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl3_3" onchange="toggleRoadmapItem('lvl3_3')" class="mt-0.5 w-5 h-5 text-teal-600 rounded focus:ring-teal-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl3_3')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl3_3" onchange="toggleRoadmapItem('lvl3_3')" class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl3_3')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">3-3. バックエンドとフロント (Fulfillment)</span>
-                                            <span class="text-xs text-teal-600 dark:text-teal-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>3-3. バックエンドとフロントエンド（Fulfillment）</span>
+                                            <span class="text-xs text-teal-600 dark:text-teal-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">外部DB/Webhook連携を担うバックエンドとUIフロントエンドの役割。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">外部DB/Webhook連携を担うバックエンドとUIフロントエンドの役割。</p>
                                     </div>
                                 </div>
                             </div>
@@ -390,44 +357,44 @@
 
                         <!-- Level 4 -->
                         <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                            <div class="bg-purple-50 dark:bg-purple-900/30 px-4 sm:px-6 py-3.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <span class="px-2.5 py-0.5 bg-purple-600 text-white rounded-lg text-xs font-bold">Level 4</span>
-                                    <h3 class="font-bold text-sm sm:text-lg text-slate-900 dark:text-white">CXの設計構造</h3>
+                            <div class="bg-purple-50 dark:bg-purple-900/30 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-purple-600 text-white rounded-xl text-xs font-bold">Level 4</span>
+                                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">CXの設計構造（インテントとページ）</h3>
                                 </div>
                                 <span class="text-xs font-semibold text-purple-600 dark:text-purple-400" id="lvl4Count">0/3 完了</span>
                             </div>
-                            <div class="p-3 sm:p-6 space-y-2.5">
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl4_1" onchange="toggleRoadmapItem('lvl4_1')" class="mt-0.5 w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl4_1')">
+                            <div class="p-6 space-y-3">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl4_1" onchange="toggleRoadmapItem('lvl4_1')" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl4_1')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">4-1. インテント (Intent) と エンティティ (Entity)</span>
-                                            <span class="text-xs text-purple-600 dark:text-purple-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>4-1. インテント (Intent) と エンティティ (Entity)</span>
+                                            <span class="text-xs text-purple-600 dark:text-purple-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">ユーザーの意図を把握し、発話から重要キーワードを抜き出す構成要素。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">ユーザーの意図を把握し、発話から重要キーワードを抜き出す構成要素。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl4_2" onchange="toggleRoadmapItem('lvl4_2')" class="mt-0.5 w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl4_2')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl4_2" onchange="toggleRoadmapItem('lvl4_2')" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl4_2')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">4-2. フロー (Flow) と ページ (Page)</span>
-                                            <span class="text-xs text-purple-600 dark:text-purple-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>4-2. フロー (Flow) と ページ (Page) による会話状態の管理</span>
+                                            <span class="text-xs text-purple-600 dark:text-purple-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">大規模会話をトピックごとにグループ化する状態遷移モデル。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">大規模会話をトピックごとにグループ化する状態遷移モデル。</p>
                                     </div>
                                 </div>
 
-                                <div class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 active:bg-slate-100 transition border border-transparent hover:border-slate-200">
-                                    <input type="checkbox" id="chk_lvl4_3" onchange="toggleRoadmapItem('lvl4_3')" class="mt-0.5 w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer flex-shrink-0 touch-target">
-                                    <div class="flex-1 cursor-pointer min-w-0" onclick="openRoadmapDetail('lvl4_3')">
+                                <div class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition border border-transparent hover:border-slate-200">
+                                    <input type="checkbox" id="chk_lvl4_3" onchange="toggleRoadmapItem('lvl4_3')" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer">
+                                    <div class="flex-1 cursor-pointer" onclick="openRoadmapDetail('lvl4_3')">
                                         <div class="font-bold text-sm text-slate-900 dark:text-white flex items-center justify-between">
-                                            <span class="truncate">4-3. イベントハンドラと例外処理</span>
-                                            <span class="text-xs text-purple-600 dark:text-purple-400 flex-shrink-0 ml-2">解説 <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                            <span>4-3. イベントハンドラと例外ハンドリング（No Input / No Match）</span>
+                                            <span class="text-xs text-purple-600 dark:text-purple-400 hover:underline">解説を見る <i class="fa-solid fa-chevron-right ml-1"></i></span>
                                         </div>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">無応答や想定外の発話が発生した際のフォローバックルール。</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">無応答や想定外の発話が発生した際のフォローバックルール。</p>
                                     </div>
                                 </div>
                             </div>
@@ -436,22 +403,22 @@
                 </section>
 
                 <!-- ROADMAP DETAIL MODAL -->
-                <div id="roadmapModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl w-full max-h-[85vh] sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-                        <div class="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-750">
-                            <div class="flex items-center space-x-2.5 min-w-0">
-                                <span class="px-2 py-0.5 bg-blue-600 text-white rounded-md text-[10px] sm:text-xs font-bold flex-shrink-0" id="modalBadge">Level 1</span>
-                                <h3 class="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate" id="modalTitle">トピック詳細解説</h3>
+                <div id="roadmapModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in">
+                        <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-750">
+                            <div class="flex items-center space-x-3">
+                                <span class="px-2.5 py-1 bg-blue-600 text-white rounded-lg text-xs font-bold" id="modalBadge">Level 1</span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white" id="modalTitle">トピック詳細解説</h3>
                             </div>
-                            <button onclick="closeRoadmapModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-2 -mr-2">
-                                <i class="fa-solid fa-xmark text-lg"></i>
+                            <button onclick="closeRoadmapModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg p-1">
+                                <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
-                        <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm" id="modalBody">
-                            <!-- Content injected via JS -->
+                        <div class="p-6 overflow-y-auto space-y-5 text-sm" id="modalBody">
+                            <!-- Dynamic Content -->
                         </div>
-                        <div class="p-3 sm:p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750 flex justify-end">
-                            <button onclick="closeRoadmapModal()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold rounded-xl text-xs transition">
+                        <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750 flex justify-end">
+                            <button onclick="closeRoadmapModal()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition">
                                 閉じる
                             </button>
                         </div>
@@ -459,368 +426,433 @@
                 </div>
 
                 <!-- 3. FLASHCARDS TAB -->
-                <section id="tab-flashcards" class="tab-content hidden space-y-4 sm:space-y-6">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
+                <section id="tab-flashcards" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <h2 class="text-xl sm:text-2xl font-bold mb-0.5">用語フラッシュカード</h2>
-                            <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm">カードをタップして裏返し、効率良く復習しましょう。</p>
+                            <h2 class="text-2xl font-bold mb-1">用語フラッシュカード（学習モード）</h2>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">カードをクリックして裏返し、用語や概念を効率良く復習しましょう。</p>
                         </div>
-                        <div class="flex items-center justify-between w-full sm:w-auto space-x-3 pt-1 sm:pt-0">
-                            <span class="text-xs font-semibold text-slate-500" id="cardCounter">カード 1 / 14</span>
-                            <button onclick="shuffleFlashcards()" class="px-3 py-1.5 bg-white dark:bg-slate-700 hover:bg-slate-100 border border-slate-200 dark:border-slate-600 rounded-xl text-xs font-semibold transition flex items-center shadow-sm active:scale-95">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xs font-semibold text-slate-500" id="cardCounter">カード 1 / 11</span>
+                            <button onclick="shuffleFlashcards()" class="px-3.5 py-2 bg-white dark:bg-slate-700 hover:bg-slate-100 border border-slate-200 dark:border-slate-600 rounded-xl text-xs font-semibold transition flex items-center shadow-sm">
                                 <i class="fa-solid fa-shuffle mr-1.5"></i> シャッフル
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex flex-col items-center justify-center py-2 sm:py-6">
-                        <div id="flashcard" onclick="flipCard()" class="w-full max-w-xl h-72 sm:h-80 perspective-1000 cursor-pointer">
+                    <div class="flex flex-col items-center justify-center py-6">
+                        <div id="flashcard" onclick="flipCard()" class="w-full max-w-xl h-80 perspective-1000 cursor-pointer">
                             <div id="flashcardInner" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-2xl">
                                 <!-- Front -->
-                                <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-100 dark:from-slate-800 dark:to-slate-850 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between backface-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-100 dark:from-slate-800 dark:to-slate-850 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between backface-hidden">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[10px] sm:text-xs font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 px-2.5 py-0.5 rounded-full" id="cardCategory">重要用語</span>
-                                        <span class="text-[11px] text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> タップで裏面</span>
+                                        <span class="text-xs font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full" id="cardCategory">重要用語</span>
+                                        <span class="text-xs text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> クリックで裏面</span>
                                     </div>
                                     <div class="text-center space-y-2">
-                                        <h3 class="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white" id="cardTerm">有効</h3>
+                                        <h3 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white" id="cardTerm">有効</h3>
                                         <p class="text-xs text-slate-400">やさしい言い換え: <span class="text-teal-600 dark:text-teal-400 font-semibold" id="cardEasyTerm">「現在アクティブな状態」</span></p>
                                     </div>
-                                    <div class="text-center text-[11px] text-slate-400">タップして解説を確認</div>
+                                    <div class="text-center text-xs text-slate-400">クリックして解説を確認</div>
                                 </div>
                                 <!-- Back -->
-                                <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-blue-700 text-white p-6 sm:p-8 rounded-2xl flex flex-col justify-between backface-hidden rotate-y-180">
+                                <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-blue-700 text-white p-8 rounded-2xl flex flex-col justify-between backface-hidden rotate-y-180">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[10px] sm:text-xs font-bold bg-white/20 px-2.5 py-0.5 rounded-full">概念解説</span>
-                                        <span class="text-[11px] text-blue-200"><i class="fa-solid fa-rotate mr-1"></i> タップで表面</span>
+                                        <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">概念解説</span>
+                                        <span class="text-xs text-blue-200"><i class="fa-solid fa-rotate mr-1"></i> クリックで表面</span>
                                     </div>
-                                    <div class="text-center space-y-2 sm:space-y-3">
-                                        <p class="text-xs sm:text-base leading-relaxed text-blue-50" id="cardDefinition">
+                                    <div class="text-center space-y-3">
+                                        <p class="text-sm sm:text-base leading-relaxed text-blue-50" id="cardDefinition">
                                             会話の任意の時点で、有効なハンドブックは1つのみであり、1つのページと関連付けられたフローのみがアクティブです。
                                         </p>
                                     </div>
-                                    <div class="text-center text-[11px] text-blue-200">理解したら次へ</div>
+                                    <div class="text-center text-xs text-blue-200">理解したら次へ</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-center space-x-2 sm:space-x-4 mt-6 sm:mt-8 w-full max-w-xl">
-                            <button onclick="prevCard()" class="flex-1 py-3 bg-white dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-xs sm:text-sm transition shadow-sm flex items-center justify-center active:scale-95 touch-target">
-                                <i class="fa-solid fa-arrow-left mr-1.5"></i> 前へ
+                        <div class="flex items-center space-x-4 mt-8">
+                            <button onclick="prevCard()" class="px-5 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-sm transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-arrow-left mr-2"></i> 前へ
                             </button>
-                            <button onclick="markCardKnown()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition flex items-center justify-center active:scale-95 touch-target">
-                                <i class="fa-solid fa-check mr-1.5"></i> 覚えた！
+                            <button onclick="markCardKnown()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center">
+                                <i class="fa-solid fa-check mr-2"></i> 覚えた！
                             </button>
-                            <button onclick="nextCard()" class="flex-1 py-3 bg-white dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-xs sm:text-sm transition shadow-sm flex items-center justify-center active:scale-95 touch-target">
-                                次へ <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                            <button onclick="nextCard()" class="px-5 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-sm transition shadow-sm flex items-center">
+                                次へ <i class="fa-solid fa-arrow-right ml-2"></i>
                             </button>
                         </div>
                     </div>
                 </section>
 
                 <!-- 4. OFFICIAL GLOSSARY TAB -->
-                <section id="tab-official_glossary" class="tab-content hidden space-y-4 sm:space-y-6">
+                <section id="tab-official_glossary" class="tab-content hidden space-y-6">
                     <div>
-                        <h2 class="text-xl sm:text-2xl font-bold mb-1 flex items-center">
-                            <div class="w-6 h-6 sm:w-7 sm:h-7 mr-2.5 flex items-center justify-center flex-shrink-0">
-                                <svg viewBox="0 0 32 32" class="w-full h-full fill-emerald-500">
-                                    <rect x="14.5" y="3" width="3" height="4.5" rx="1.5"/>
-                                    <rect x="2" y="12" width="3" height="8" rx="1.5"/>
-                                    <rect x="27" y="12" width="3" height="8" rx="1.5"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12,7 H20 C23.866,7 27,10.134 27,14 V19 C27,22.866 23.866,26 20,26 H12 C8.134,26 5,22.866 5,19 V14 C5,10.134 8.134,7 12,7 Z M11.5,12 A1.75,1.75 0 1,0 11.5,15.5 A1.75,1.75 0 1,0 11.5,12 Z M20.5,12 A1.75,1.75 0 1,0 20.5,15.5 A1.75,1.75 0 1,0 20.5,12 Z M11,20.5 A1,1 0 1,0 11,20.5 Z M16,20.5 A1,1 0 1,0 16,22.5 A1,1 0 1,0 16,20.5 Z M21,20.5 A1,1 0 1,0 21,22.5 A1,1 0 1,0 21,20.5 Z"/>
-                                </svg>
-                            </div>
-                            <span>主要用語ノート</span>
-                        </h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm">公式ドキュメントで説明されている用語や基本ルールを整理したノートです。</p>
+                        <h2 class="text-2xl font-bold mb-2">主要用語ノート</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">公式ドキュメントで説明されている用語や基本ルールを整理したノートです。キーワード検索で絞り込めます。</p>
                     </div>
 
                     <div class="relative">
-                        <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="glossarySearch" onkeyup="filterGlossary()" placeholder="用語やキーワードで検索（例: 有効, エージェント, フロー...）" class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                        <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400"></i>
+                        <input type="text" id="glossarySearch" onkeyup="filterGlossary()" placeholder="用語やキーワードで検索（例: 有効, エージェント, ランタイム, 音声認識...）" class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
                     </div>
 
-                    <div id="glossaryContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="有効 active ハンドブック ページ フロー アクティブ 状態">
+                    <div id="glossaryContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="有効 active ハンドブック ページ フロー アクティブ 状態">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">有効 (Active)</h3>
-                                <span class="text-[10px] bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">状態管理</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">有効 (Active)</h3>
+                                <span class="text-xs bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 px-2.5 py-1 rounded-full font-medium">状態管理</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「今アクティブに動いている状態」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">会話の任意の時点で、有効なハンドブックは 1 つのみであり、1 つのページと関連付けられたフローのみがアクティブです。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">会話の任意の時点で、有効なハンドブックは 1 つのみであり、1 つのページと関連付けられたフローのみがアクティブです。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="エージェント 人間 ライブ 仮想 bot チャットボット chat bot">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="エージェント 人間 ライブ 仮想 bot チャットボット chat bot">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">エージェント / 仮想 / ライブ</h3>
-                                <span class="text-[10px] bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full font-medium">登場人物</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">エージェント、仮想エージェント、ライブ エージェント</h3>
+                                <span class="text-xs bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2.5 py-1 rounded-full font-medium">登場人物</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「基本はAIボット。人間担当者はライブエージェント」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">単にエージェントという場合は仮想エージェント（AIボット）を指します。人間オペレーターはライブエージェントと呼ばれます。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">単にエージェントという場合は仮想エージェント（AIボット）を指します。人間オペレーターはライブエージェントと呼ばれます。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="音声入力 音声認識 音声文字変換 STT ファイル ストリーミング">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="音声入力 音声認識 音声文字変換 STT ファイル ストリーミング">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">音声入力、音声認識 (STT)</h3>
-                                <span class="text-[10px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full font-medium">音声処理</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">音声入力、音声認識 (STT)</h3>
+                                <span class="text-xs bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2.5 py-1 rounded-full font-medium">音声処理</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「ユーザーの声を聞き取って文字にする仕組み」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">音声データを音声文字変換（Speech-to-Text）によってリアルタイムでテキスト化し、エージェントで処理します。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">音声データを音声文字変換（Speech-to-Text）によってリアルタイムでテキスト化し、エージェントで処理します。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="オーディオ出力 音声合成 テキスト読み上げ TTS レスポンス">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="オーディオ出力 音声合成 テキスト読み上げ TTS レスポンス">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">オーディオ出力、音声合成 (TTS)</h3>
-                                <span class="text-[10px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full font-medium">音声処理</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">オーディオ出力、音声合成 (TTS)</h3>
+                                <span class="text-xs bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2.5 py-1 rounded-full font-medium">音声処理</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「ボットの返答を音声にして聞かせる仕組み」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">エージェントの返答テキストを音声合成（Text-to-Speech）で人工音声に変換して送信します。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">エージェントの返答テキストを音声合成（Text-to-Speech）で人工音声に変換して送信します。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ランタイム 設計時 コンソール API エージェント 構築 会話中">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ランタイム 設計時 コンソール API エージェント 構築 会話中">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">ランタイム と 設計時</h3>
-                                <span class="text-[10px] bg-cyan-50 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-300 px-2 py-0.5 rounded-full font-medium">状態管理</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">ランタイム と 設計時</h3>
+                                <span class="text-xs bg-cyan-50 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-300 px-2.5 py-1 rounded-full font-medium">状態管理</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「作っているとき(設計時) vs 動いているとき(ランタイム)」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">コンソール等でボットを作る作業が「設計時」、実際に顧客とボットが会話している最中が「ランタイム」です。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">コンソール等でボットを作る作業が「設計時」、実際に顧客とボットが会話している最中が「ランタイム」です。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="会話のターン エンドユーザーの入力 ユーザーのクエリ やり取り レスポンス">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="会話のターン エンドユーザーの入力 ユーザーのクエリ やり取り レスポンス">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">会話のターン (Turn)</h3>
-                                <span class="text-[10px] bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-full font-medium">仕組み</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">会話のターン (Conversation Turn)</h3>
+                                <span class="text-xs bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-2.5 py-1 rounded-full font-medium">仕組み</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「1往復のやり取り」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">エンドユーザーの発話クエリと、それに対するボットのレスポンスで構成される1回のキャッチボール。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">エンドユーザーの発話クエリと、それに対するボットのレスポンスで構成される1回のキャッチボール。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="フロー flow トピック 会話 テーマ 分割 状態遷移 構造">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="フロー flow トピック 会話 テーマ 分割 状態遷移 構造">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">フロー (Flow)</h3>
-                                <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">CX構造</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">フロー (Flow)</h3>
+                                <span class="text-xs bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2.5 py-1 rounded-full font-medium">CX構造</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「会話の大きなテーマ・章（例: 予約フロー、FAQフロー）」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">大規模な対話エージェントをトピックごとにグループ化・分割して独立管理する構造単位。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">複雑で大規模な会話エージェントを、トピックごとに独立させて管理・分割するセクション単位。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ページ page 状態 ステップ 場面 フォーム 遷移">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ページ page 状態 ステップ 場面 フォーム 遷移">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">ページ (Page)</h3>
-                                <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">CX構造</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">ページ (Page)</h3>
+                                <span class="text-xs bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2.5 py-1 rounded-full font-medium">CX構造</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
-                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「会話の1つのステップ・場面（例: 日時選択画面）」
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「会話の1つのステップ・場面（例: 日時入力画面）」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">フローを構成する具体的な会話状態。ユーザーへの質問やデータ収集（フォーム）、応答メッセージを処理します。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">フローを構成する特定の「会話状態」。質問の投げかけ、情報の収集（フォーム）、応答メッセージ処理を担当します。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="インテント intent 意図 目的 トレーニングフレーズ 発話">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="インテント intent 意図 目的 トレーニングフレーズ 発話">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">インテント (Intent)</h3>
-                                <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">CX構造</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">インテント (Intent)</h3>
+                                <span class="text-xs bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2.5 py-1 rounded-full font-medium">CX構造</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「ユーザーのやりたい目的・意図」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">ユーザーの発話（トレーニングフレーズ）から「予約したい」「解約したい」などの要求目的を判別・特定するコンポーネント。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">エンドユーザーの発話から「予約したい」「キャンセルしたい」などの目的・意図を判別・特定するコンポーネント。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="エンティティ entity 変数 データ 日時 パラメータ 抽出 キーワード">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="エンティティ entity 変数 データ 日時 パラメータ 抽出 キーワード">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">エンティティ (Entity)</h3>
-                                <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">CX構造</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">エンティティ (Entity)</h3>
+                                <span class="text-xs bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2.5 py-1 rounded-full font-medium">CX構造</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
                                 <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「発話から抜き出す重要な単語・データ型」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">発話の中から「日付(@sys.date)」「人数(@sys.number)」などのキーとなる情報を抽出・構造化する変数定義。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">ユーザーの発話テキストから「日付(@sys.date)」「人数(@sys.number)」などのキーとなる情報を抽出・構造化するタグ定義。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="フルフィルメント fulfillment 返答 メッセージ レスポンス webhook 応答">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ルート 遷移 route transition 条件 矢印 ページ移動">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">フルフィルメント (Fulfillment)</h3>
-                                <span class="text-[10px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full font-medium">システム連携</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">ルート (Route) / 遷移 (Transition)</h3>
+                                <span class="text-xs bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2.5 py-1 rounded-full font-medium">会話制御</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
-                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「返答メッセージの作成＆裏側での処理実行」
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「次のページへ移動するための切り替えルール」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">ユーザーへの応答メッセージを生成する仕組み。テキスト回答の返却だけでなく、Webhookを介した外部DB呼び出しも同時に実行します。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">特定のIntent検知や条件式を満たした時に、どのPage/Flowへ会話を移行させるかを制御するロジック。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ウェブフック webhook api バックエンド データベース 連携 外部 サービス">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="フォーム パラメータ form parameter データ収集 必須 質問 穴埋め">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">ウェブフック (Webhook)</h3>
-                                <span class="text-[10px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full font-medium">システム連携</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">フォーム (Form) &amp; パラメータ (Parameter)</h3>
+                                <span class="text-xs bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2.5 py-1 rounded-full font-medium">データ収集</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
-                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「自社システムやデータベースと繋ぐパイプ」
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「ボットが聞き出したい入力項目」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Dialogflow CXと自社サーバー（バックエンドAPI）をリアルタイムで接続し、在庫確認や予約処理、認証などを実行する仕組み。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Page内でユーザーから順次聞き出すべき必須データ項目群。すべてのParameterが埋まるまで自動的にプロンプトを出します。</p>
                         </div>
 
-                        <div class="glossary-item bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="生成AI AI llm generative fallback フォールバック 自動回答 no match">
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="イベントハンドラ event handler no input no match エラー 例外 無音">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400">ジェネラティブフォールバック</h3>
-                                <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">生成AI機能</span>
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">イベントハンドラ (Event Handler)</h3>
+                                <span class="text-xs bg-rose-50 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded-full font-medium">例外処理</span>
                             </div>
                             <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
-                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「理解できなかった時に生成AIが自然にフォロー回答する機能」
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「聞き取れなかった時などのトラブル用ルール」
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">定義したインテントに当てはまらない発話（No Match）に対し、Googleの大型言語モデル（LLM）を使って自然な補完回答やガイダンスを自動生成する機能。</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">無音応答（sys.no-input）や発話不一致（sys.no-match）などの例外イベントが発生した際に、自動で聞き直しやオペレーター転送を行うルール。</p>
+                        </div>
+
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="フルフィルメント fulfillment 返答 メッセージ レスポンス webhook 応答">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">フルフィルメント (Fulfillment)</h3>
+                                <span class="text-xs bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2.5 py-1 rounded-full font-medium">システム連携</span>
+                            </div>
+                            <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「ボットの返答メッセージ作成＆外部処理実行」
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">ユーザーへの応答メッセージを作成する処理。テキスト応答の生成だけでなく、Webフック呼び出し（外部連携）の実行も行います。</p>
+                        </div>
+
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="ウェブフック webhook api バックエンド データベース 連携 外部 サービス">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">ウェブフック (Webhook)</h3>
+                                <span class="text-xs bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2.5 py-1 rounded-full font-medium">システム連携</span>
+                            </div>
+                            <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「自社のデータベースやシステムと接続するパイプ」
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Dialogflow CXと自社サーバー（バックエンドAPI）を接続する通信インターフェース。リアルタイムの在庫照会やデータ登録を実現します。</p>
+                        </div>
+
+                        <div class="glossary-item bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2" data-keywords="環境 バージョン environment version デプロイ テスト 本番 リリース 管理">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-base text-blue-600 dark:text-blue-400">環境 (Environment) と バージョン (Version)</h3>
+                                <span class="text-xs bg-cyan-50 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-300 px-2.5 py-1 rounded-full font-medium">管理・運用</span>
+                            </div>
+                            <div class="easy-badge-container p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg border border-teal-200 dark:border-teal-800 text-xs text-teal-700 dark:text-teal-300 font-semibold">
+                                <i class="fa-solid fa-face-smile mr-1"></i> やさしい言い換え: 「テスト用と本番用の切り替え＆スナップショット保存」
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">作成したボットの状態を固定保存（バージョン化）し、開発・検証・本番環境へと安全に配信（デプロイ）する機能。</p>
                         </div>
                     </div>
                 </section>
 
-                <!-- 5. SIMULATOR TAB -->
-                <section id="tab-simulator" class="tab-content hidden space-y-4 sm:space-y-6">
+                <!-- 5. ADVANCED SIMULATOR TAB (WITH DEBUG INSPECTOR) -->
+                <section id="tab-simulator" class="tab-content hidden space-y-6">
                     <div>
-                        <h2 class="text-xl sm:text-2xl font-bold mb-1">体験シミュレーター</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm">Flow/Page/Intentの遷移状況をリアルタイム監視するシミュレーターです。</p>
+                        <h2 class="text-2xl font-bold mb-1">体験シミュレーター (デバッグモニター付き)</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Flow/Page/Intent/Parameterの遷移状況をライブ表示する概念理解用シミュレーターです。</p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                        <!-- Chat Panel -->
-                        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md flex flex-col h-[480px] sm:h-[520px] overflow-hidden">
-                            <div class="bg-slate-100 dark:bg-slate-750 px-4 sm:px-6 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    <span class="font-bold text-xs sm:text-sm truncate">CX 市役所総合案内 AI (Demo)</span>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Chat Column -->
+                        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md flex flex-col h-[550px] overflow-hidden">
+                            <div class="bg-slate-100 dark:bg-slate-750 px-6 py-3.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <span class="font-bold text-sm">CX 市役所総合案内 AI (Runtime Demo)</span>
                                 </div>
-                                <button onclick="resetSim()" class="text-xs text-slate-500 hover:text-rose-500 p-1 transition">
+                                <button onclick="resetSim()" class="text-xs text-slate-500 hover:text-rose-500 transition">
                                     <i class="fa-solid fa-rotate-right mr-1"></i> リセット
                                 </button>
                             </div>
 
-                            <div id="simChatMessages" class="flex-1 p-3 sm:p-5 overflow-y-auto space-y-3 bg-slate-50/50 dark:bg-slate-900/50">
-                                <div class="flex items-start space-x-2.5">
-                                    <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">CX</div>
-                                    <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl rounded-tl-xs border border-slate-200 dark:border-slate-700 text-xs sm:text-sm shadow-sm max-w-[85%] leading-relaxed">
-                                        市役所総合案内AIです。<br>「住民票の取り方」「引っ越しの手続き」「開庁時間」「職員とお話ししたい」など、お気軽にお問い合わせください。
+                            <div id="simChatMessages" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 bg-slate-50/50 dark:bg-slate-900/50">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">CX</div>
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-sm border border-slate-200 dark:border-slate-700 text-sm shadow-sm max-w-[85%] leading-relaxed">
+                                        お電話・メッセージありがとうございます！市役所総合案内AIです。<br>「住民票の取り方」「引っ越しの手続き」「開庁時間」「職員とお話ししたい」など、お気軽にお問い合わせください。
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="px-3 py-2 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700/50 flex flex-wrap gap-1.5" id="simSuggestions">
-                                <button onclick="sendSimMessage('住民票の取り方を知りたい')" class="text-[11px] bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-100 px-2.5 py-1 rounded-lg font-medium transition active:scale-95">「住民票」</button>
-                                <button onclick="sendSimMessage('開庁時間を教えて')" class="text-[11px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-lg font-medium transition active:scale-95">「開庁時間」</button>
-                                <button onclick="sendSimMessage('市外からの引っ越し手続きは？')" class="text-[11px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-2.5 py-1 rounded-lg font-medium transition active:scale-95">「引っ越し」</button>
-                                <button onclick="sendSimMessage('担当部署の職員につないで')" class="text-[11px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 hover:bg-amber-100 px-2.5 py-1 rounded-lg font-medium transition active:scale-95">「職員へ繋ぐ」</button>
+                            <div class="px-4 py-2 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700/50 flex flex-wrap gap-2" id="simSuggestions">
+                                <button onclick="sendSimMessage('住民票の取り方を知りたい')" class="text-xs bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 hover:bg-blue-100 px-3 py-1.5 rounded-lg font-medium transition">「住民票の取り方を知りたい」</button>
+                                <button onclick="sendSimMessage('開庁時間を教えて')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-medium transition">「開庁時間を教えて」</button>
+                                <button onclick="sendSimMessage('市外からの引っ越し手続きは？')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-medium transition">「市外からの引っ越し手続きは？」</button>
+                                <button onclick="sendSimMessage('担当部署の職員につないで')" class="text-xs bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 hover:bg-amber-100 px-3 py-1.5 rounded-lg font-medium transition">「担当部署の職員につないで」</button>
                             </div>
 
-                            <div class="p-3 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex space-x-2">
-                                <input type="text" id="simUserInput" onkeypress="handleSimKeyPress(event)" placeholder="メッセージを入力..." class="flex-1 px-3 py-2 bg-slate-100 dark:bg-slate-700 border-none rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <button onclick="handleSimSend()" class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white px-4 py-2 rounded-xl font-medium text-xs sm:text-sm transition shadow-md touch-target flex items-center justify-center">
+                            <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex space-x-3">
+                                <input type="text" id="simUserInput" onkeypress="handleSimKeyPress(event)" placeholder="メッセージを入力（例: 住民票、引っ越し、開庁時間...）" class="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-slate-700 border-none rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button onclick="handleSimSend()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition shadow-md">
                                     <i class="fa-solid fa-paper-plane"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Inspector Panel -->
-                        <div class="bg-slate-900 text-slate-100 rounded-2xl p-4 sm:p-5 border border-slate-700 shadow-md flex flex-col justify-between font-mono text-xs space-y-3">
+                        <!-- Inspector Column -->
+                        <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-700 shadow-md flex flex-col justify-between font-mono text-xs space-y-4">
                             <div>
-                                <div class="flex items-center justify-between border-b border-slate-700 pb-2.5 mb-3">
-                                    <span class="font-bold text-teal-400 flex items-center text-xs">
+                                <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                                    <span class="font-bold text-teal-400 flex items-center">
                                         <i class="fa-solid fa-microchip mr-2"></i> CX 状態インスペクター
                                     </span>
-                                    <span class="bg-teal-900/80 text-teal-300 text-[9px] px-2 py-0.5 rounded uppercase">Live State</span>
+                                    <span class="bg-teal-900/80 text-teal-300 text-[10px] px-2 py-0.5 rounded uppercase">Live State</span>
                                 </div>
 
-                                <div class="grid grid-cols-2 lg:grid-cols-1 gap-2 sm:gap-3">
+                                <div class="space-y-3">
                                     <div>
-                                        <div class="text-slate-400 text-[9px] uppercase">Active Flow</div>
-                                        <div class="text-emerald-400 font-bold bg-slate-800 px-2.5 py-1 rounded-lg mt-0.5 truncate" id="dbgActiveFlow">Default Start Flow</div>
+                                        <div class="text-slate-400 text-[10px] uppercase">Active Flow</div>
+                                        <div class="text-emerald-400 font-bold bg-slate-800 px-3 py-1.5 rounded-lg mt-1" id="dbgActiveFlow">Default Start Flow</div>
                                     </div>
 
                                     <div>
-                                        <div class="text-slate-400 text-[9px] uppercase">Active Page</div>
-                                        <div class="text-amber-300 font-bold bg-slate-800 px-2.5 py-1 rounded-lg mt-0.5 truncate" id="dbgActivePage">Start Page</div>
+                                        <div class="text-slate-400 text-[10px] uppercase">Active Page</div>
+                                        <div class="text-amber-300 font-bold bg-slate-800 px-3 py-1.5 rounded-lg mt-1" id="dbgActivePage">Start Page</div>
                                     </div>
 
-                                    <div class="col-span-2 lg:col-span-1">
-                                        <div class="text-slate-400 text-[9px] uppercase">Detected Intent (Match)</div>
-                                        <div class="text-cyan-300 bg-slate-800 px-2.5 py-1 rounded-lg mt-0.5 truncate" id="dbgIntent">None</div>
+                                    <div>
+                                        <div class="text-slate-400 text-[10px] uppercase">Detected Intent (Match)</div>
+                                        <div class="text-cyan-300 bg-slate-800 px-3 py-1.5 rounded-lg mt-1" id="dbgIntent">None</div>
                                     </div>
 
-                                    <div class="col-span-2 lg:col-span-1">
-                                        <div class="text-slate-400 text-[9px] uppercase">Session Parameters</div>
-                                        <pre class="text-purple-300 bg-slate-800 p-2.5 rounded-lg mt-0.5 overflow-x-auto text-[10px] max-h-24" id="dbgParams">{}</pre>
+                                    <div>
+                                        <div class="text-slate-400 text-[10px] uppercase">Session Parameters</div>
+                                        <pre class="text-purple-300 bg-slate-800 p-3 rounded-lg mt-1 overflow-x-auto text-[11px]" id="dbgParams">{}</pre>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60 text-[10px] text-slate-400 space-y-0.5">
+                            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60 text-[10px] text-slate-400 space-y-1">
                                 <div class="font-bold text-slate-300">💡 会話構造の補足:</div>
-                                <p class="leading-tight">ユーザーの入力からインテントが検知され、条件を満たすことでPageやFlowが移動（遷移）します。</p>
+                                <p>ユーザーの入力からインテントが検知され、条件を満たすことでPageやFlowが移動（遷移）します。</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- 6. NO-CODE GUIDE TAB -->
-                <section id="tab-nocode" class="tab-content hidden space-y-4 sm:space-y-6">
-                    <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-5 sm:p-8 text-white shadow-xl">
-                        <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-2 backdrop-blur-sm">視覚的ビジュアルエディタ</span>
-                        <h2 class="text-xl sm:text-3xl font-bold mb-2">ノーコード開発ガイド</h2>
-                        <p class="text-purple-100 text-xs sm:text-base leading-relaxed">
+                <section id="tab-nocode" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                        <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">視覚的ビジュアルエディタ</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold mb-3">ノーコード開発ガイド (6つのステップ)</h2>
+                        <p class="text-purple-100 text-sm sm:text-base leading-relaxed">
                             コンソールを使用した基本的な会話フローの設計手順の概要を解説します。
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-                            <div class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-sm">1</div>
-                            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">エージェント作成と基本設定</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">1</div>
+                            <h3 class="font-bold text-base text-slate-900 dark:text-white">エージェント作成と基本設定</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">プロジェクト内に新規Agentを作成。言語やタイムゾーンなどの基本項目を設定します。</p>
                         </div>
 
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-                            <div class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-sm">2</div>
-                            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">フローとページの設計</h3>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">2</div>
+                            <h3 class="font-bold text-base text-slate-900 dark:text-white">フローとページの設計</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">トピックごとにフローを作成し、会話の各ステップ（Page）をビジュアル上に配置します。</p>
                         </div>
 
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-                            <div class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-sm">3</div>
-                            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Intent (意図) の登録</h3>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">3</div>
+                            <h3 class="font-bold text-base text-slate-900 dark:text-white">Intent (意図) の登録</h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">想定される発話パターン（Training Phrases）を登録し、意図の判定精度を高めます。</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">4</div>
+                            <h3 class="font-bold text-base text-slate-900 dark:text-white">Entity (抽出変数) の設定</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">「日付」や「数値」など、発話から抜き出したいデータ型（エンティティ）を指定します。</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">5</div>
+                            <h3 class="font-bold text-base text-slate-900 dark:text-white">Routes (遷移条件) の接続</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">インテント検知やデータ入力完了をトリガーに、次のPageへ画面線で接続します。</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">6</div>
+                            <h3 class="font-bold text-base text-slate-900 dark:text-white">シミュレーターでテスト</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">組み込みテストコンソールで対話を試行し、意図判定や遷移の挙動を確認・修正します。</p>
                         </div>
                     </div>
                 </section>
 
                 <!-- 7. VOICEBOT TAB -->
-                <section id="tab-voicebot" class="tab-content hidden space-y-4 sm:space-y-6">
-                    <div class="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl p-5 sm:p-8 text-white shadow-xl">
-                        <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-2 backdrop-blur-sm">音声AI・自動応答</span>
-                        <h2 class="text-xl sm:text-3xl font-bold mb-2">ボイスボット構築ガイド</h2>
-                        <p class="text-cyan-100 text-xs sm:text-base leading-relaxed">
-                            音声自動応答における音声認識（STT）と音声合成（TTS）の設定ポイントを解説します。
+                <section id="tab-voicebot" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                        <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">音声AI・自動応答システム</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold mb-3">ボイスボット構築ガイド</h2>
+                        <p class="text-cyan-100 text-sm sm:text-base leading-relaxed">
+                            音声自動応答（ボイスボット）における音声認識と音声合成の設定ポイントを解説します。
                         </p>
                     </div>
 
-                    <div class="space-y-3 sm:space-y-4">
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 flex items-center justify-center text-lg font-bold flex-shrink-0">
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6">
+                            <div class="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
                                 <i class="fa-solid fa-microphone"></i>
                             </div>
-                            <div class="space-y-1">
-                                <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">1. STT (Speech-to-Text) 音声認識の最適化</h3>
+                            <div class="space-y-1 flex-1">
+                                <h3 class="font-bold text-base text-slate-900 dark:text-white">1. STT (Speech-to-Text) 音声認識の最適化</h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                     電話回線のノイズ補正や、特有の用語（商品名・店舗名など）の登録により音声テキスト変換精度を調整します。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6">
+                            <div class="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </div>
+                            <div class="space-y-1 flex-1">
+                                <h3 class="font-bold text-base text-slate-900 dark:text-white">2. TTS (Text-to-Speech) 音声合成とSSML活用</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                    音声モデルの設定や、SSMLタグによる「ポーズ（間）」・読み上げ速度の調整で適切な音声出力を設定します。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6">
+                            <div class="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                                <i class="fa-solid fa-phone-volume"></i>
+                            </div>
+                            <div class="space-y-1 flex-1">
+                                <h3 class="font-bold text-base text-slate-900 dark:text-white">3. Barge-in (割り込み発話) &amp; DTMF (プッシュ入力)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                    ガイダンス再生中の発話検知（割り込み）や、電話のプッシュボタン操作（DTMF）への対応を設定します。
                                 </p>
                             </div>
                         </div>
@@ -828,57 +860,55 @@
                 </section>
 
                 <!-- 8. LINKS TAB -->
-                <section id="tab-links" class="tab-content hidden space-y-4 sm:space-y-6">
+                <section id="tab-links" class="tab-content hidden space-y-6">
                     <div>
-                        <h2 class="text-xl sm:text-2xl font-bold mb-1">参考リンク＆リソース</h2>
-                        <p class="text-slate-500 text-xs sm:text-sm">学習の参考に役立つ Google Cloud 公式ドキュメントへのリンク集です。</p>
+                        <h2 class="text-2xl font-bold mb-2">参考リンク＆リソース</h2>
+                        <p class="text-slate-500 text-sm">学習の参考に役立つ Google Cloud 公式ドキュメントへのリンク集です。</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                        <a href="https://cloud.google.com/dialogflow/cx/docs" target="_blank" rel="noopener" class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-blue-500 transition flex items-center space-x-4 group active:scale-[0.99]">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
-                                <i class="fa-solid fa-book text-lg sm:text-xl"></i>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://cloud.google.com/dialogflow/cx/docs" target="_blank" rel="noopener" class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-blue-500 transition flex items-center space-x-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-book text-xl"></i>
                             </div>
-                            <div class="min-w-0">
-                                <h3 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white truncate">Dialogflow CX 公式ドキュメント</h3>
-                                <p class="text-[11px] text-slate-500 mt-0.5 truncate">Google Cloud 公式の各種ガイド・リファレンス。</p>
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white">Dialogflow CX 公式ドキュメント</h3>
+                                <p class="text-xs text-slate-500 mt-1">Google Cloud 公式の各種ガイド・リファレンス。</p>
                             </div>
                         </a>
                     </div>
                 </section>
 
                 <!-- 9. QUIZ TAB -->
-                <section id="tab-quiz" class="tab-content hidden space-y-4 sm:space-y-6">
-                    <div class="bg-gradient-to-r from-rose-600 to-pink-700 rounded-2xl p-5 sm:p-8 text-white shadow-xl flex flex-row justify-between items-center gap-3">
+                <section id="tab-quiz" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-rose-600 to-pink-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl flex justify-between items-center">
                         <div>
-                            <span class="inline-block bg-white/20 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2 backdrop-blur-sm">理解度テスト</span>
-                            <h2 class="text-xl sm:text-3xl font-bold">クイズ (全10問)</h2>
+                            <span class="inline-block bg-white/20 text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">理解度確認テスト</span>
+                            <h2 class="text-2xl sm:text-3xl font-bold">理解度チェッククイズ (全10問)</h2>
                         </div>
-                        <div class="bg-white/10 px-3 py-2 sm:p-4 rounded-xl text-center backdrop-blur-md flex-shrink-0">
-                            <div class="text-[10px] sm:text-xs text-rose-200">スコア</div>
-                            <div class="text-base sm:text-2xl font-bold" id="quizScoreDisplay">0 / 0</div>
+                        <div class="bg-white/10 p-4 rounded-xl text-center backdrop-blur-md">
+                            <div class="text-xs text-rose-200">現在のスコア</div>
+                            <div class="text-2xl font-bold" id="quizScoreDisplay">0 / 0 問正解</div>
                         </div>
                     </div>
 
-                    <div id="quizCardContainer" class="bg-white dark:bg-slate-800 p-4 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4 sm:space-y-6">
-                        <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
-                            <span class="text-xs font-bold bg-rose-50 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 px-2.5 py-1 rounded-full" id="quizQuestionNum">第 1 問 / 全 10 問</span>
-                            <button onclick="startQuiz()" class="text-xs text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-rotate mr-1"></i> 解き直す</button>
+                    <div id="quizCardContainer" class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                        <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-4">
+                            <span class="text-xs font-bold bg-rose-50 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 px-3 py-1 rounded-full" id="quizQuestionNum">第 1 問 / 全 10 問</span>
+                            <button onclick="startQuiz()" class="text-xs text-slate-400 hover:text-slate-600"><i class="fa-solid fa-rotate mr-1"></i> 解き直す</button>
                         </div>
-                        <h3 class="text-sm sm:text-lg font-bold text-slate-900 dark:text-white leading-relaxed" id="quizQuestionText">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white" id="quizQuestionText">
                             問題文がここに表示されます
                         </h3>
-                        <div class="space-y-2.5" id="quizOptionsContainer"></div>
+                        <div class="space-y-3" id="quizOptionsContainer"></div>
                         
-                        <div id="quizExplanationBox" class="hidden p-3.5 sm:p-4 rounded-xl bg-slate-100 dark:bg-slate-750 space-y-1.5 border-l-4 border-blue-500 text-xs sm:text-sm">
-                            <div class="font-bold" id="quizResultTitle"></div>
-                            <p class="text-slate-600 dark:text-slate-300 leading-relaxed" id="quizExplanationText"></p>
+                        <div id="quizExplanationBox" class="hidden p-4 rounded-xl bg-slate-100 dark:bg-slate-750 space-y-2 border-l-4 border-blue-500">
+                            <div class="font-bold text-sm" id="quizResultTitle"></div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300" id="quizExplanationText"></p>
                         </div>
 
                         <div class="flex justify-end pt-2">
-                            <button id="quizNextBtn" onclick="nextQuizQuestion()" class="hidden w-full sm:w-auto px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition active:scale-95 touch-target">
-                                次の問題へ <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </button>
+                            <button id="quizNextBtn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-sm shadow-md transition">次の問題へ <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
                 </section>
@@ -887,8 +917,8 @@
         </main>
     </div>
 
-    <!-- Application Javascript Logic -->
     <script>
+        // State
         let appState = {
             roadmap: {
                 lvl1_1: false, lvl1_2: false, lvl1_3: false,
@@ -899,6 +929,7 @@
             easyMode: true
         };
 
+        // Detailed Roadmap Topic Explanations DB
         const roadmapDetails = {
             lvl1_1: {
                 title: "1-1. エージェントと仮想エージェント・人間オペレーター",
@@ -992,12 +1023,13 @@
                 title: "4-3. イベントハンドラと例外ハンドリング（No Input / No Match）",
                 badge: "Level 4 - CX設計",
                 official: "無応答（sys.no-input）や意図不明の発話（sys.no-match）が発生した際、自動で聞き直したり案内を出したりするルール。",
-                easy: "「聞こえなかったとき等のトラブル対応ルール」です。",
+                easy: "「聞き取れなかったとき等のトラブル対応ルール」です。",
                 example: "無音が続いた際に「恐れ入りますが、もう一度お話しいただけますか？」と案内します。",
                 point: "連続でエラーになった場合のオペレーター転送など、抜け道（リカバリー）の用意が重要です。"
             }
         };
 
+        // Flashcards DB
         const flashcardData = [
             { term: "有効 (Active)", easy: "今アクティブに動いている状態", category: "状態管理", def: "会話の任意の時点で、有効なハンドブックは1つのみであり、1つのページと関連付けられたフローのみがアクティブです。" },
             { term: "エージェント (Agent)", easy: "基本はAIボット。人間はライブエージェント", category: "登場人物", def: "コンテキストがない場合、エージェントは仮想エージェント（ボット）を指します。人間オペレーターはライブエージェントと呼ばれます。" },
@@ -1009,24 +1041,25 @@
             { term: "ランタイム と 設計時", easy: "作っているとき vs 動いているとき", category: "状態管理", def: "コンソール等で構築するのが設計時アクティビティ、顧客と会話中がランタイムアクティビティです。" },
             { term: "インテント (Intent)", easy: "ユーザーの「やりたい目的・意図」", category: "CX構造", def: "ユーザーの発話から「予約したい」「キャンセルしたい」などの目的を特定する要素。" },
             { term: "エンティティ (Entity)", easy: "発話から抜き出すキー情報", category: "CX構造", def: "発話の中から「日付」「時間」「人数」などの具体的な変数データを抽出する仕組み。" },
-            { term: "ページ (Page)", easy: "会話の特定の「場面・ステップ」", category: "CX構造", def: "会話の状態を表す単位。現在アクティブなページで質問やフォーム処理が行われます。" },
-            { term: "フロー (Flow)", easy: "会話の大テーマ・章", category: "CX構造", def: "大規模な会話をトピックごとにグループ化・分割して管理する単位。" },
-            { term: "フルフィルメント (Fulfillment)", easy: "回答メッセージ作成と外部システム処理", category: "システム", def: "ユーザーへの応答メッセージを作成し、必要に応じてWebhook呼び出しを実行する処理。" },
-            { term: "ウェブフック (Webhook)", easy: "自社システムやDBと繋ぐパイプ", category: "システム", def: "Dialogflow CXと外部バックエンドサーバー（API）をリアルタイム接続する仕組み。" }
+            { term: "ページ (Page)", easy: "会話の特定の「場面・ステップ」", category: "CX構造", def: "会話の状態を表す単位。現在アクティブなページで質問やフォーム処理が行われます。" }
         ];
 
+        let currentCardIndex = 0;
+        let isCardFlipped = false;
+
+        // Quiz Database (10 Questions)
         const quizDataFull = [
             {
                 question: "コンソール等を使用してエージェントを構築・編集する状態・作業を何と呼びますか？",
                 options: ["ランタイム", "設計時 (Design-time)", "セッション", "フロントエンド"],
                 correct: 1,
-                explanation: "正解は「設計時 (Design-time)」です。実際にエンドユーザーと対話処理中なのが「ランタイム」アクティビティです。"
+                explanation: "正解は「設計時」です。実際にエンドユーザーと対話処理中なのが「ランタイム」アクティビティです。"
             },
             {
                 question: "エンドユーザーと仮想エージェント間の 1 回のやり取り（1往復）の単位を何と呼びますか？",
                 options: ["会話のターン (Turn)", "ハンドブック", "セッション", "コンタクトセンター"],
                 correct: 0,
-                explanation: "正解は「会話のターン (Turn)」です。ユーザー発話とボット応答のペアで1ターンとなります。"
+                explanation: "正解は「会話のターン」です。ユーザー発話とボット応答のペアで1ターンとなります。"
             },
             {
                 question: "エージェントと会話する顧客・利用者のことを何と呼びますか？",
@@ -1042,13 +1075,13 @@
             },
             {
                 question: "ユーザーの「音声入力」をテキストデータに変換する技術（STT）の名称は？",
-                options: ["音声合成", "音声認識 (音声文字変換 / STT)", "Fulfillment", "インテント"],
+                options: ["音声合成", "音声認識 (音声文字変換)", "Fulfillment", "インテント"],
                 correct: 1,
                 explanation: "正解は「音声認識 (Speech-to-Text)」です。"
             },
             {
                 question: "ボットの返答テキストを人工音声に変換して出力する技術（TTS）の名称は？",
-                options: ["音声合成 (テキスト読み上げ / TTS)", "音声認識", "エンティティ", "セッション"],
+                options: ["音声合成 (テキスト読み上げ)", "音声認識", "エンティティ", "セッション"],
                 correct: 0,
                 explanation: "正解は「音声合成 (Text-to-Speech)」です。"
             },
@@ -1078,22 +1111,15 @@
             }
         ];
 
-        let currentCardIndex = 0;
-        let isCardFlipped = false;
         let quizQuestions = [];
         let currentQuizIndex = 0;
         let quizScoreCount = 0;
         let quizAnswered = false;
 
+        // Progress Functions
         function loadProgress() {
             const saved = localStorage.getItem('dialogflow_cx_beginner_progress');
-            if (saved) { 
-                try { 
-                    appState = JSON.parse(saved); 
-                } catch (e) {
-                    console.error("Failed to load local progress:", e);
-                } 
-            }
+            if (saved) { try { appState = JSON.parse(saved); } catch (e) {} }
             applyRoadmapState();
             updateProgressStats();
         }
@@ -1109,13 +1135,9 @@
             let completed = keys.filter(k => appState.roadmap[k]).length;
             const percent = Math.round((completed / total) * 100);
 
-            const progressBar = document.getElementById('headerProgressBar');
-            const progressText = document.getElementById('headerProgressText');
-            const dashText = document.getElementById('dashPercentText');
-
-            if (progressBar) progressBar.style.width = percent + '%';
-            if (progressText) progressText.innerText = percent + '%';
-            if (dashText) dashText.innerText = percent + '%';
+            document.getElementById('headerProgressBar').style.width = percent + '%';
+            document.getElementById('headerProgressText').innerText = percent + '%';
+            document.getElementById('dashPercentText').innerText = percent + '%';
 
             updateLevelCount('lvl1', ['lvl1_1', 'lvl1_2', 'lvl1_3']);
             updateLevelCount('lvl2', ['lvl2_1', 'lvl2_2', 'lvl2_3']);
@@ -1133,7 +1155,7 @@
             const chk = document.getElementById('chk_' + id);
             if (chk) appState.roadmap[id] = chk.checked;
             saveProgress();
-            showToast('進捗を保存しました', 'success');
+            showToast('進捗を保存しました！', 'success');
         }
 
         function applyRoadmapState() {
@@ -1150,6 +1172,7 @@
             showToast('学習進捗をリセットしました', 'info');
         }
 
+        // Roadmap Detail Modal
         function openRoadmapDetail(id) {
             const item = roadmapDetails[id];
             if (!item) return;
@@ -1158,24 +1181,24 @@
             document.getElementById('modalTitle').innerText = item.title;
 
             document.getElementById('modalBody').innerHTML = `
-                <div class="p-3.5 sm:p-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800 space-y-1">
+                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800 space-y-1">
                     <div class="font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider"><i class="fa-solid fa-book mr-1"></i> 概要定義</div>
                     <p class="text-slate-700 dark:text-slate-200 leading-relaxed">${item.official}</p>
                 </div>
 
-                <div class="p-3.5 sm:p-4 bg-teal-50 dark:bg-teal-900/30 rounded-xl border border-teal-200 dark:border-teal-800 space-y-1">
+                <div class="p-4 bg-teal-50 dark:bg-teal-900/30 rounded-xl border border-teal-200 dark:border-teal-800 space-y-1">
                     <div class="font-bold text-xs text-teal-600 dark:text-teal-400 uppercase tracking-wider"><i class="fa-solid fa-face-smile mr-1"></i> やさしい言葉で言うと？</div>
                     <p class="text-slate-700 dark:text-slate-200 leading-relaxed font-medium">${item.easy}</p>
                 </div>
 
                 <div class="space-y-1">
                     <div class="font-bold text-xs text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-comments mr-1"></i> 具体的イメージ・会話例</div>
-                    <p class="text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-750 p-3 rounded-lg leading-relaxed">${item.example}</p>
+                    <p class="text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-750 p-3 rounded-lg">${item.example}</p>
                 </div>
 
                 <div class="space-y-1">
                     <div class="font-bold text-xs text-indigo-500 uppercase tracking-wider"><i class="fa-solid fa-lightbulb mr-1"></i> 設計時のポイント</div>
-                    <p class="text-slate-600 dark:text-slate-300 bg-indigo-50/50 dark:bg-indigo-900/20 p-3 rounded-lg border border-indigo-100 dark:border-indigo-800/50 leading-relaxed">${item.point}</p>
+                    <p class="text-slate-600 dark:text-slate-300 bg-indigo-50/50 dark:bg-indigo-900/20 p-3 rounded-lg border border-indigo-100 dark:border-indigo-800/50">${item.point}</p>
                 </div>
             `;
 
@@ -1186,22 +1209,24 @@
             document.getElementById('roadmapModal').classList.add('hidden');
         }
 
+        // Easy Mode Toggle
         function toggleEasyMode() {
             appState.easyMode = !appState.easyMode;
             const btn = document.getElementById('easyModeToggleBtn');
             const containers = document.querySelectorAll('.easy-badge-container');
 
             if (appState.easyMode) {
-                btn.innerHTML = '<i class="fa-solid fa-face-smile text-sm sm:mr-1.5"></i><span class="hidden sm:inline">やさしい解説 (ON)</span>';
+                btn.innerHTML = '<i class="fa-solid fa-face-smile mr-1.5"></i> やさしい解説 (ON)';
                 containers.forEach(el => el.classList.remove('hidden'));
-                showToast('やさしい解説 ON', 'success');
+                showToast('やさしい解説モード ON', 'success');
             } else {
-                btn.innerHTML = '<i class="fa-solid fa-face-meh text-sm sm:mr-1.5"></i><span class="hidden sm:inline">やさしい解説 (OFF)</span>';
+                btn.innerHTML = '<i class="fa-solid fa-face-meh mr-1.5"></i> やさしい解説 (OFF)';
                 containers.forEach(el => el.classList.add('hidden'));
-                showToast('やさしい解説 OFF', 'info');
+                showToast('やさしい解説モード OFF', 'info');
             }
         }
 
+        // Flashcards Logic
         function updateFlashcardUI() {
             const card = flashcardData[currentCardIndex];
             document.getElementById('cardTerm').innerText = card.term;
@@ -1224,6 +1249,7 @@
         function shuffleFlashcards() { flashcardData.sort(() => Math.random() - 0.5); currentCardIndex = 0; updateFlashcardUI(); showToast('カードをシャッフルしました', 'success'); }
         function markCardKnown() { showToast('「覚えた！」に登録しました', 'success'); nextCard(); }
 
+        // Simulator Logic with Realtime Inspector
         let simState = {
             flow: 'Default Start Flow',
             page: 'Start Page',
@@ -1242,10 +1268,10 @@
             simState = { flow: 'Default Start Flow', page: 'Start Page', intent: 'None', params: {} };
             updateInspector();
             document.getElementById('simChatMessages').innerHTML = `
-                <div class="flex items-start space-x-2.5">
-                    <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">CX</div>
-                    <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl rounded-tl-xs border border-slate-200 dark:border-slate-700 text-xs sm:text-sm shadow-sm max-w-[85%] leading-relaxed">
-                        市役所総合案内AIです。<br>「住民票の取り方」「引っ越しの手続き」「開庁時間」「職員とお話ししたい」など、お気軽にお問い合わせください。
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">CX</div>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-sm border border-slate-200 dark:border-slate-700 text-sm shadow-sm max-w-[85%] leading-relaxed">
+                        お電話・メッセージありがとうございます！市役所総合案内AIです。<br>「住民票の取り方」「引っ越しの手続き」「開庁時間」「職員とお話ししたい」など、お気軽にお問い合わせください。
                     </div>
                 </div>
             `;
@@ -1262,16 +1288,16 @@
             appendSimMessage(message, 'user');
             inputEl.value = '';
 
-            setTimeout(() => { processSimResponse(message); }, 400);
+            setTimeout(() => { processSimResponse(message); }, 500);
         }
 
         function appendSimMessage(text, sender) {
             const container = document.getElementById('simChatMessages');
             const div = document.createElement('div');
-            div.className = sender === 'user' ? 'flex items-start justify-end space-x-2.5' : 'flex items-start space-x-2.5';
+            div.className = sender === 'user' ? 'flex items-start justify-end space-x-3' : 'flex items-start space-x-3';
             div.innerHTML = sender === 'user' ? 
-                `<div class="bg-blue-600 text-white p-3 rounded-2xl text-xs sm:text-sm max-w-[80%]">${escapeHtml(text)}</div><div class="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold flex-shrink-0">You</div>` :
-                `<div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">CX</div><div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl text-xs sm:text-sm max-w-[85%] border border-slate-200 dark:border-slate-700 shadow-sm leading-relaxed">${text}</div>`;
+                `<div class="bg-blue-600 text-white p-4 rounded-2xl text-sm max-w-[80%]">${escapeHtml(text)}</div><div class="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center text-xs font-bold flex-shrink-0">You</div>` :
+                `<div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">CX</div><div class="bg-white dark:bg-slate-800 p-4 rounded-2xl text-sm max-w-[85%] border border-slate-200 dark:border-slate-700 shadow-sm leading-relaxed">${text}</div>`;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
@@ -1285,26 +1311,39 @@
                 simState.intent = 'city.certificates.request';
                 simState.params['document_type'] = '住民票の写し';
                 simState.params['fee'] = '300円（コンビニ時200円）';
-                botReply = "住民票のお手続きですね！<br>マイナンバーカードをお持ちの場合、コンビニマルチコピー機でも取得可能です。<br>「コンビニ取得」「窓口取得」などの案内ができます。";
+                botReply = "住民票・各種証明書のお手続きですね！<br>マイナンバーカードをお持ちの場合、コンビニのマルチコピー機で取得いただけます。<br>「コンビニ取得」「窓口取得」「郵送請求」のどちらについて案内いたしますか？";
             } else if (msg.includes('引っ越し') || msg.includes('転入') || msg.includes('転出') || msg.includes('住所')) {
                 simState.flow = 'Relocation Flow';
                 simState.page = 'Move In Requirement Page';
                 simState.intent = 'city.relocation.move_in';
                 simState.params['move_type'] = '市外からの転入';
-                simState.params['deadline'] = '14日以内';
-                botReply = "お引っ越し（転入届）ですね。<br>市外からの転入は<b>「転出証明書」</b>・<b>本人確認書類</b>・<b>マイナンバーカード</b>を市民課窓口へご持参ください。";
+                simState.params['deadline'] = '住み始めてから14日以内';
+                botReply = "お引っ越しのお手続き（転入届）ですね。<br>市外からの転入の場合は、<b>前住所地の「転出証明書」</b>・<b>本人確認書類</b>・<b>マイナンバーカード</b>をご持参の上、市民課窓口でお手続きください。";
             } else if (msg.includes('時間') || msg.includes('開庁') || msg.includes('土日') || msg.includes('休み')) {
                 simState.flow = 'General Info Flow';
                 simState.page = 'Office Hours Page';
                 simState.intent = 'city.info.hours';
                 simState.params['office_hours'] = '平日 8:45〜17:15';
-                botReply = "開庁時間は <b>平日 8:45〜17:15</b> です。<br>第2・第4土曜日の午前中（9:00〜12:00）も一部窓口を開けております。";
+                simState.params['weekend_service'] = '第2・第4土曜午前中（9:00〜12:00）';
+                botReply = "本庁舎の開庁時間は <b>平日 8:45〜17:15</b> です。<br>毎月第2・第4土曜日の午前中（9:00〜12:00）も、一部窓口を開庁しております。";
             } else if (msg.includes('人間') || msg.includes('オペレーター') || msg.includes('担当') || msg.includes('職員') || msg.includes('電話')) {
                 simState.flow = 'Support Flow';
                 simState.page = 'Human Staff Handover';
                 simState.intent = 'city.support.staff_handover';
                 simState.params['department'] = '市民総合相談課';
+                simState.params['priority'] = 'High';
                 botReply = "かしこまりました。担当部署の職員（ライブエージェント）へおつなぎいたします。少々お待ちください。";
+            } else if (msg.includes('コンビニ') || msg.includes('窓口') || msg.includes('郵送')) {
+                if (simState.flow === 'Certificates Flow') {
+                    simState.page = 'Certificate Method Detail';
+                    if (msg.includes('コンビニ')) {
+                        simState.params['selected_method'] = 'コンビニ交付';
+                        botReply = "コンビニ交付のご案内です。<br>全国のコンビニマルチコピー機にて、マイナンバーカードをセットし「行政サービス」を選択してください。（暗証番号4桁が必要です）";
+                    } else {
+                        simState.params['selected_method'] = '窓口申請';
+                        botReply = "窓口申請のご案内です。<br>本庁市民課または各出張所にて、申請書をご記入の上、本人確認書類をご提示ください。";
+                    }
+                }
             } else if (msg.includes('ありがとう') || msg.includes('助かった') || msg.includes('わかりました')) {
                 simState.page = 'End Session';
                 botReply = "お役に立てて幸いです！その他にご不明な点はございますか？";
@@ -1314,6 +1353,7 @@
             appendSimMessage(botReply, 'bot');
         }
 
+        // Quiz System (Randomized 10 Qs)
         function startQuiz() {
             quizQuestions = [...quizDataFull].sort(() => Math.random() - 0.5);
             currentQuizIndex = 0;
@@ -1334,8 +1374,8 @@
 
             q.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = 'w-full text-left p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-rose-500 bg-white dark:bg-slate-750 font-medium text-xs sm:text-sm transition shadow-sm flex items-center justify-between group active:scale-[0.99] touch-target';
-                btn.innerHTML = `<span><strong class="mr-2 text-rose-600">${['A', 'B', 'C', 'D'][idx]}.</strong> ${escapeHtml(opt)}</span><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>`;
+                btn.className = 'w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-rose-500 bg-white dark:bg-slate-750 font-medium text-sm transition shadow-sm flex items-center justify-between group';
+                btn.innerHTML = `<span><strong class="mr-2 text-rose-600">${['A', 'B', 'C', 'D'][idx]}.</strong> ${escapeHtml(opt)}</span><i class="fa-solid fa-chevron-right text-slate-300"></i>`;
                 btn.onclick = () => selectQuizAnswer(idx, btn);
                 optContainer.appendChild(btn);
             });
@@ -1346,14 +1386,14 @@
             quizAnswered = true;
             const q = quizQuestions[currentQuizIndex];
             if (idx === q.correct) {
-                btnEl.className = 'w-full text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 font-medium text-xs sm:text-sm text-emerald-900 dark:text-emerald-200 shadow-sm flex items-center justify-between';
+                btnEl.className = 'w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 font-medium text-sm text-emerald-900 dark:text-emerald-200 shadow-sm flex items-center justify-between';
                 quizScoreCount++;
                 document.getElementById('quizResultTitle').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i> 正解！';
             } else {
-                btnEl.className = 'w-full text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 dark:bg-rose-900/30 font-medium text-xs sm:text-sm text-rose-900 dark:text-rose-200 shadow-sm flex items-center justify-between';
+                btnEl.className = 'w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 dark:bg-rose-900/30 font-medium text-sm text-rose-900 dark:text-rose-200 shadow-sm flex items-center justify-between';
                 document.getElementById('quizResultTitle').innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-500 mr-2"></i> 不正解';
             }
-            document.getElementById('quizScoreDisplay').innerText = `${quizScoreCount} / ${quizQuestions.length}`;
+            document.getElementById('quizScoreDisplay').innerText = `${quizScoreCount} / ${quizQuestions.length} 問正解`;
             document.getElementById('quizExplanationText').innerText = q.explanation;
             document.getElementById('quizExplanationBox').classList.remove('hidden');
             document.getElementById('quizNextBtn').classList.remove('hidden');
@@ -1366,22 +1406,23 @@
             } else {
                 const percent = Math.round((quizScoreCount / quizQuestions.length) * 100);
                 document.getElementById('quizCardContainer').innerHTML = `
-                    <div class="text-center py-8 sm:py-12 space-y-4">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-rose-100 dark:bg-rose-900/50 text-rose-600 text-2xl sm:text-3xl font-bold rounded-full flex items-center justify-center mx-auto">
+                    <div class="text-center py-12 space-y-5">
+                        <div class="w-20 h-20 bg-rose-100 dark:bg-rose-900/50 text-rose-600 text-3xl font-bold rounded-full flex items-center justify-center mx-auto">
                             <i class="fa-solid fa-trophy"></i>
                         </div>
-                        <h3 class="text-xl sm:text-2xl font-bold">結果: ${quizScoreCount} / ${quizQuestions.length} 正解 (${percent}%)</h3>
-                        <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-                            ${percent >= 80 ? '高い理解度です！引き続き復習用として活用してください。' : 'もう一度ロードマップや用語ノートを見直して再挑戦してみましょう！'}
+                        <h3 class="text-2xl font-bold">クイズ完了！結果: ${quizScoreCount} / ${quizQuestions.length} 正解 (${percent}%)</h3>
+                        <p class="text-sm text-slate-500 max-w-md mx-auto">
+                            ${percent >= 80 ? '高い理解度です！用語理解の定着を目指して引き続き活用しましょう。' : 'もう一度ロードマップや用語ノートを見直して再挑戦してみましょう！'}
                         </p>
-                        <button onclick="startQuiz()" class="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs sm:text-sm shadow-lg transition active:scale-95 touch-target">
-                            もう一度最初から解く <i class="fa-solid fa-rotate-right ml-1"></i>
+                        <button onclick="startQuiz()" class="px-8 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-sm shadow-lg transition">
+                            もう一度最初から解く <i class="fa-solid fa-rotate-right ml-2"></i>
                         </button>
                     </div>
                 `;
             }
         }
 
+        // Tab Switcher
         function switchTab(tabId) {
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(el => el.classList.add('hidden'));
@@ -1399,62 +1440,33 @@
                 }
             });
 
-            closeSidebar();
-            const mainEl = document.querySelector('main');
-            if (mainEl) mainEl.scrollTop = 0;
-        }
-
-        function toggleSidebar() { 
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('opacity-0', 'pointer-events-none');
-                overlay.classList.add('opacity-100');
-            } else {
-                closeSidebar();
-            }
+            if (window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
+            document.querySelector('main').scrollTop = 0;
         }
 
-        function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            if (sidebar) sidebar.classList.add('-translate-x-full');
-            if (overlay) {
-                overlay.classList.remove('opacity-100');
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-            }
-        }
-
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
-            if (!container) return;
             const toast = document.createElement('div');
-            const colorClass = type === 'error' ? 'bg-rose-600' : (type === 'info' ? 'bg-indigo-600' : 'bg-emerald-600');
-            const iconClass = type === 'error' ? 'fa-circle-xmark' : (type === 'info' ? 'fa-circle-info' : 'fa-circle-check');
-            
-            toast.className = `${colorClass} text-white px-3.5 py-2.5 rounded-xl shadow-lg text-xs font-medium transition-all duration-300 flex items-center pointer-events-auto`;
-            toast.innerHTML = `<i class="fa-solid ${iconClass} mr-2"></i>${escapeHtml(message)}`;
+            toast.className = 'bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg text-sm transition-all duration-300 flex items-center';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i>${escapeHtml(message)}`;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 2500);
+            setTimeout(() => toast.remove(), 3000);
         }
 
         function filterGlossary() {
             const query = document.getElementById('glossarySearch').value.toLowerCase();
             document.querySelectorAll('.glossary-item').forEach(item => {
                 const text = item.innerText.toLowerCase();
-                const keywords = (item.getAttribute('data-keywords') || '').toLowerCase();
+                const keywords = item.getAttribute('data-keywords').toLowerCase();
                 item.style.display = (text.includes(query) || keywords.includes(query)) ? 'block' : 'none';
             });
         }
 
-        function escapeHtml(str) { 
-            if (typeof str !== 'string') return '';
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); 
-        }
+        function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
 
         window.onload = function() {
             loadProgress();

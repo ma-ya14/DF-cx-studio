@@ -19,7 +19,7 @@ const roadmapDetails = {
     lvl1_3: {
         title: "1-3. コンタクト センターの仕組み",
         badge: "Level 1 - システム",
-        official: "企業が電話やWebチャット、LINEなどを通じて顧客とコミュニケーションを交わす問い合わせ窓口システム基盤（CCaaS等）を指します。Dialogflow CX はコンタクト センターにおける高度な「対話型AIエンジン」として統合されます。",
+        official: "企業が電話やWebチャット、LINEなどをを通じて顧客とコミュニケーションを交わす問い合わせ窓口システム基盤（CCaaS等）を指します。Dialogflow CX はコンタクト センターにおける高度な「対話型AIエンジン」として統合されます。",
         easy: "コールセンターやWeb問い合わせの『自動応答・電話接続システム』全体のことです。",
         example: "Genesys Cloud や Avaya、Twilio などの電話基盤システムと Dialogflow CX を接続し、IVR（自動音声応答）をAI化して人間の応答負担を削減します。",
         point: "電話連携（Voicebot）の場合は音声認識・合成の遅延やノイズ制御、チャット連携（Chatbot）の場合はリッチメッセージ（ボタンやリッチカード）の活用など、チャネルに合わせた設計がポイントになります。"
@@ -167,4 +167,15 @@ const quizDataFull = [
         explanation: "正解は「エンティティ (Entity)」です。発話から重要なパラメータを構造化データとして抜き出します。"
     },
     {
-        question: "会話の中で無回答（無音）が発生した際に起動する代表的なイベントハンドラは？
+        question: "会話の中で無回答（無音）が発生した際に起動する代表的なイベントハンドラは？",
+        options: ["sys.no-match-default", "sys.no-input-default", "sys.cancel", "sys.error"],
+        correct: 1,
+        explanation: "正解は「sys.no-input-default」です。ユーザーからの入力や音声が検出されない場合に起動します。"
+    },
+    {
+        question: "ボットで解決できない際、人間の担当者に会話を引き継ぐ処理を何と呼びますか？",
+        options: ["ライブエージェント引き継ぎ (Handover)", "ランタイム転送", "Fulfillment", "エンティティ抽出"],
+        correct: 0,
+        explanation: "正解は「ライブエージェント引き継ぎ（Handover）」です。SIPやSIPREC等を介してオペレーターへ接続します。"
+    }
+];
