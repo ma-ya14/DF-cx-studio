@@ -1,0 +1,28 @@
+/* STREAMING_CHUNK:Styling application base layout and animations... */
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+-webkit-tap-highlight-color: transparent;
+}
+
+/* 3D Perspective for Flashcards */ .perspective-1000 { perspective: 1000px; } .transform-style-3d {あ transform-style: preserve-3d; } .backface-hidden { backface-visibility: hidden; } .rotate-y-180 { transform: rotateY(180deg); }
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+width: 5px;
+height: 5px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: #cbd5e1;
+border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+background: #475569;
+}
+
+/* Mobile touch target minimum size optimization */
+.touch-target {
+min-height: 44px;
+}
